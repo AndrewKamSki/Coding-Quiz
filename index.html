@@ -1,12 +1,54 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="assets/style.css" rel="stylesheet">
+  <title>Coding Quiz</title>
 </head>
+
 <body>
-    
+  <!-- View High Scores/ Timer -->
+  <header>
+    <nav>
+      <div class="scores">
+        <h2>View High Scores</h2>
+      </div>
+      <div class="timer">
+        <h2>Time:</h2>
+      </div>
+    </nav>
+  </header>
+
+  <div class="container">
+    <!-- Questions appear here -->
+    <div id="quiz-container" class="hidden">
+      <div id="quiz-questions">Questions open up here</div>
+      <div id="answers" class="buttons">
+        <button class="btn">Button 1</button>
+        <button class="btn">Button 2</button>
+        <button class="btn">Button 3</button>
+        <button class="btn">Button 4</button>
+      </div>
+    </div>
+    <!-- Quiz Navigation -->
+    <div class="quiz-nav">
+      <button id="start-btn" class="btn">Start Quiz</button>
+      <button id="go-back" class="btn hidden">Go Back</button>
+      <button id="clear-highscores" class="btn hidden">Clear Highscores</button>
+    </div>
+    <!-- Submit Score -->
+    <div class="submit-score">
+      <label>Enter initials:</label>
+      <input type="text" id="initials" placeholder="ABC" class="entry hidden">
+      <button id="submit" class="btn hidden">Submit</button>
+    </div>
+    <!-- post right/wrong for answers -->
+    <div class="ans-result">
+      <h3></h3>
+    </div>
+  </div>
+  <script src="assets/script.js"></script>
 </body>
 </html>
