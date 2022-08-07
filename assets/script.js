@@ -6,10 +6,12 @@ var quizQuestions = document.querySelector("#quiz-questions");
 var answerBtns = document.querySelector("#answers");
 var startBtn = document.querySelector("#start-btn");
 var timerEl = document.querySelector(".timer-count");
+var scoreSubmitEl = document.querySelector("#submit-entry")
 
 var quizArraySelect = 0;
 var timer;
 var timerCount;
+var finalTime;
 
 // Array of objects with each object being a question and giving its possible answers
 var quizArray = [
@@ -85,8 +87,22 @@ function renderQuestions(question) {
   ans4btn.textContent = question.answers[3].answerText;
 }
 
-function selectAnswer() {
-
+function checkAnswer() {
+  // evaluation of if clicked button was correct
+  // if true, then it moves on,
+  // if false, then should subtract 10 seconds from timerCount
+  // Adds to the selector of the quiz array to prep the next question
+  quizArraySelect++;
+  // Checks to see if all questions asked
+  if(quizArraySelect === quizArray.length) {
+    // If true, stops and records time, and initiates score entry function 
+    clearInterval(timer);
+    finalTime = timerCount;
+    enterScore();
+  } else {
+    // If false, populates next question
+    setQuestions();
+  }
 }
 
 function startTimer(){
@@ -101,9 +117,17 @@ function startTimer(){
   }, 1000);
 };
 
+function enterScore() {
+  answerBtns.setAttribute("class", "hidden");
+  quizQuestions.textContent = "All Done!";
+  scoreSubmitEl.setAttribute("class", "submit-score");
+}
+
 function getScores() {
 
 };
+
+answerBtns.addEventListener("click", checkAnswer)
 
 // Event listner to start the quiz when the start button is clicked
 startBtn.addEventListener("click", startQuiz);
