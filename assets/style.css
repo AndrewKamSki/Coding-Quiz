@@ -21,6 +21,10 @@ nav {
   padding-left: 2%;
 }
 
+.scores:hover {
+  cursor: pointer;
+}
+
 .timer {
   position: fixed;
   right: 0;

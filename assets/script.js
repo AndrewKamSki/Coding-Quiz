@@ -6,12 +6,20 @@ var quizQuestions = document.querySelector("#quiz-questions");
 var answerBtns = document.querySelector("#answers");
 var startBtn = document.querySelector("#start-btn");
 var timerEl = document.querySelector(".timer-count");
-var scoreSubmitEl = document.querySelector("#submit-entry")
+var scoreSubmitEl = document.querySelector("#submit-entry");
+var scoresEl = document.querySelector(".scores");
+var initialsEl = document.querySelector("#initials");
+var submitBtn = document.querySelector("#submit")
+var goBackBtn = document.querySelector("#go-back");
+var clearScoresBtn = document.querySelector("#clear-highscores");
 
 var quizArraySelect = 0;
 var timer;
 var timerCount;
 var finalTime;
+var initials;
+
+var pastScores = [];
 
 // Array of objects with each object being a question and giving its possible answers
 var quizArray = [
@@ -63,12 +71,14 @@ var quizArray = [
 ];
 
 function init() {
-  getScores();
+  quizQuestions.setAttribute("class", "center");
+  startBtn.setAttribute("class", "btn");
+  goBackBtn.setAttribute("class", "hidden");
+  clearScoresBtn.setAttribute("class", "hidden");
 }
 
 function startQuiz() {
   timerCount = 75;
-  // renderQuestions();
   startTimer();
   startBtn.setAttribute("class", "hidden");
   answerBtns.setAttribute("class", "buttons");
@@ -87,10 +97,17 @@ function renderQuestions(question) {
   ans4btn.textContent = question.answers[3].answerText;
 }
 
-function checkAnswer() {
+function checkAnswer(e) {
   // evaluation of if clicked button was correct
-  // if true, then it moves on,
-  // if false, then should subtract 10 seconds from timerCount
+  var clickedBtn = e.target.textContent;
+  for (var i=0;i<quizArray[quizArraySelect].answers.length;i++) {
+    if(clickedBtn == quizArray[quizArraySelect].answers[i].answerText) {
+      var answerBool = quizArray[quizArraySelect].answers[i].answerResult;
+    }
+  }
+  if (!answerBool){
+    timerCount = timerCount - 10;
+  }
   // Adds to the selector of the quiz array to prep the next question
   quizArraySelect++;
   // Checks to see if all questions asked
@@ -118,19 +135,55 @@ function startTimer(){
 };
 
 function enterScore() {
+  timerEl.textContent = " ";
   answerBtns.setAttribute("class", "hidden");
-  quizQuestions.textContent = "All Done!";
-  scoreSubmitEl.setAttribute("class", "submit-score");
+  quizQuestions.textContent = "All Done! You scored a " + finalTime + "!";
+  scoreSubmitEl.setAttribute("class", "submit-score center");
+}
+
+function setScores() {
+  var entry = {
+    initials: initialsEl.value,
+    score: finalTime
+  }
+  if (pastScores !== null) {
+    pastScores.push(entry);
+  } else {
+    pastScores.append(entry);
+  }
+  localStorage.setItem("pastScores", JSON.stringify(pastScores));
+  getScores();
 }
 
 function getScores() {
-
+  scoreSubmitEl.setAttribute("class", "hidden");
+  goBackBtn.setAttribute("class", "btn");
+  clearScoresBtn.setAttribute("class", "btn");
+  startBtn.setAttribute("class","hidden");
+  quizQuestions.setAttribute("class","hidden");
+  answerBtns.setAttribute("class", "hidden");
+  var storedScores = JSON.parse(localStorage.getItem("pastScores"));
+  if (storedScores !== null) {
+    document.getElementsByClassName("ans-result").textContent = storedScores.initials + ": " + storedScores.score;
+  } else {
+    return;
+  }
 };
 
-answerBtns.addEventListener("click", checkAnswer)
+// Event listener for when go back button is submitted
+goBackBtn.addEventListener("click", init);
 
-// Event listner to start the quiz when the start button is clicked
+// Event listner for when a score is submitted
+submitBtn.addEventListener("click", setScores);
+
+// Event listener for when an answer is selected
+answerBtns.addEventListener("click", checkAnswer);
+
+// Event listener to start the quiz when the start button is clicked
 startBtn.addEventListener("click", startQuiz);
+
+// Event listener to retrieve past scores
+scoresEl.addEventListener("click", getScores);
 
 // Initializes the page and retrieves past scores
 init();
