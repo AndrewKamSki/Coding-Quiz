@@ -171,8 +171,8 @@ function getScores() {
   answerBtns.setAttribute("class", "hidden");
   quizQuestions.textContent= "High Scores";
   var storedScores = JSON.parse(localStorage.getItem("pastScores"));
-  console.log(storedScores)
   if (storedScores !== null) {
+    ansResultEl.textContent = '';
     for (i=0;i<storedScores.length;i++) {
       var val = storedScores[i].initials + ": " + storedScores[i].score;
       ansResultEl.innerHTML += val + '<br/>';
@@ -181,6 +181,13 @@ function getScores() {
     return;
   }
 };
+
+function clearHighscores () {
+  localStorage.clear();
+  pastScores = [];
+  ansResultEl.textContent = '';
+  getScores();
+}
 
 // Event listener for when go back button is submitted
 goBackBtn.addEventListener("click", init);
@@ -196,6 +203,9 @@ startBtn.addEventListener("click", startQuiz);
 
 // Event listener to retrieve past scores
 scoresEl.addEventListener("click", getScores);
+
+// Event listener to clear past scores
+clearScoresBtn.addEventListener("click", clearHighscores);
 
 // Initializes the page and retrieves past scores
 init();
