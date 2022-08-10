@@ -64,7 +64,7 @@ var quizArray = [
     ]
   },
   {
-    question: "A very useful too used during development and debugging for printing content to the debugger is:",
+    question: "A very useful tool used during development and debugging for printing content to the debugger is:",
     answers: [
       {answerText: "JavaScript", answerResult: false},
       {answerText: "terminal/bash", answerResult: false},
@@ -97,7 +97,7 @@ function startQuiz() {
   timerCount = 75;
   startTimer();
   startBtn.setAttribute("class", "hidden");
-  answerBtns.setAttribute("class", "buttons center");
+  answerBtns.setAttribute("class", "buttons");
   setQuestions();
 }
 // Runs the currently selected set of questions and answers from the array
@@ -149,6 +149,7 @@ function startTimer(){
     // Test for if time runs out
     if (timerCount === 0) {
       clearInterval(timer);
+      enterScore();
     }
   }, 1000);
 };
@@ -178,14 +179,17 @@ function setScores() {
 }
 // Retrieves scores from local storage
 function getScores() {
+  quizQuestions.textContent = " ";
   scoreSubmitEl.setAttribute("class", "hidden");
   goBackBtn.setAttribute("class", "btn");
   clearScoresBtn.setAttribute("class", "btn");
   startBtn.setAttribute("class","hidden");
-  quizQuestions.setAttribute("class","center");
   ansResultEl.setAttribute("class","center");
   answerBtns.setAttribute("class", "hidden");
-  quizQuestions.textContent= "High Scores";
+  var highScoreEl = document.createElement("h1");
+  highScoreEl.textContent= "High Scores";
+  quizQuestions.append(highScoreEl)
+  quizQuestions.setAttribute("class","center");
   var storedScores = JSON.parse(localStorage.getItem("pastScores"));
   // Check if local storage is empty
   if (storedScores !== null) {
