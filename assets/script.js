@@ -12,6 +12,7 @@ var initialsEl = document.querySelector("#initials");
 var submitBtn = document.querySelector("#submit")
 var goBackBtn = document.querySelector("#go-back");
 var clearScoresBtn = document.querySelector("#clear-highscores");
+var ansResultEl = document.querySelector(".ans-result");
 
 var quizArraySelect = 0;
 var timer;
@@ -75,6 +76,7 @@ function init() {
   startBtn.setAttribute("class", "btn");
   goBackBtn.setAttribute("class", "hidden");
   clearScoresBtn.setAttribute("class", "hidden");
+  ansResultEl.setAttribute("class", "hidden")
 }
 
 function startQuiz() {
@@ -115,6 +117,7 @@ function checkAnswer(e) {
     // If true, stops and records time, and initiates score entry function 
     clearInterval(timer);
     finalTime = timerCount;
+    quizArraySelect = 0;
     enterScore();
   } else {
     // If false, populates next question
@@ -149,7 +152,10 @@ function setScores() {
   if (pastScores !== null) {
     pastScores.push(entry);
   } else {
-    pastScores.append(entry);
+    storedScores = localStorage.getItem("pastScores").split(',');
+    storedScores.push(entry);
+    storedScores.sort();
+    console.log(storedScores);
   }
   localStorage.setItem("pastScores", JSON.stringify(pastScores));
   getScores();
@@ -160,11 +166,17 @@ function getScores() {
   goBackBtn.setAttribute("class", "btn");
   clearScoresBtn.setAttribute("class", "btn");
   startBtn.setAttribute("class","hidden");
-  quizQuestions.setAttribute("class","hidden");
+  quizQuestions.setAttribute("class","center");
+  ansResultEl.setAttribute("class","center");
   answerBtns.setAttribute("class", "hidden");
+  quizQuestions.textContent= "High Scores";
   var storedScores = JSON.parse(localStorage.getItem("pastScores"));
+  console.log(storedScores)
   if (storedScores !== null) {
-    document.getElementsByClassName("ans-result").textContent = storedScores.initials + ": " + storedScores.score;
+    for (i=0;i<storedScores.length;i++) {
+      var val = storedScores[i].initials + ": " + storedScores[i].score;
+      ansResultEl.innerHTML += val + '<br/>';
+    }
   } else {
     return;
   }
